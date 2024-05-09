@@ -50,7 +50,7 @@ def train_net(args):
       pseudo_data = torch.utils.data.DataLoader(
          myDataLoader.colab_first_pseudo_label_dataset(transform=transform, valid=False),
          batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
-      # pseudo_label_maker(pseudo_data, model)
+      pseudo_label_maker(pseudo_data, model)
 
 
     # create the directory if not exist

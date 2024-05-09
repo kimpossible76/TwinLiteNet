@@ -9,7 +9,7 @@ from model import TwinLite as net
 import torch.backends.cudnn as cudnn
 import DataSet as myDataLoader
 from argparse import ArgumentParser
-from utils import train, val, netParams, save_checkpoint, poly_lr_scheduler, pseudo_label_maker
+from utils import train, val, netParams, save_checkpoint, poly_lr_scheduler, pseudo_label_maker,validation
 import torch.optim.lr_scheduler
 from torchvision.transforms import transforms as T
 import cv2
@@ -111,9 +111,9 @@ def train_net(args):
         # model.eval()
         # # validation
         # da_segment_results , ll_segment_results = val(valLoader, model)
-        model.eval()
+        # model.eval()
         # validation
-        val(valLoader, model)
+        validation(model,valLoader)
         torch.save(model.state_dict(), model_file_name)
         
         save_checkpoint({

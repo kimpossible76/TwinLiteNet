@@ -188,7 +188,7 @@ def save_checkpoint(state, filenameCheckpoint='checkpoint.pth.tar'):
 def netParams(model):
     return np.sum([np.prod(parameter.size()) for parameter in model.parameters()])
 
-def validation(model,):
+def validation(model,valLoader):
     '''
     Main function for trainign and validation
     :param args: global arguments
@@ -204,9 +204,9 @@ def validation(model,):
         cudnn.benchmark = True
         
 
-    valLoader = torch.utils.data.DataLoader(
-        myDataLoader.colabIADDataset(valid=True),
-        batch_size=16, shuffle=False, num_workers=0, pin_memory=True)
+    # valLoader = torch.utils.data.DataLoader(
+    #     myDataLoader.colabIADDataset(valid=True),
+    #     batch_size=16, shuffle=False, num_workers=0, pin_memory=True)
 
     total_paramters = netParams(model)
     print('Total network parameters: ' + str(total_paramters))

@@ -12,6 +12,26 @@ import torch.backends.cudnn as cudnn
 import DataSet as myDataLoader
 import torch.optim.lr_scheduler
 
+def resize(
+    x: torch.Tensor,
+    size: any or None = None,
+    scale_factor: list[float] or None = None,
+    mode: str = "bicubic",
+    align_corners: bool or None = False,
+) -> torch.Tensor:
+    if mode in {"bilinear", "bicubic"}:
+        return F.interpolate(
+            x,
+            size=size,
+            scale_factor=scale_factor,
+            mode=mode,
+            align_corners=align_corners,
+        )
+    elif mode in {"nearest", "area"}:
+        return F.interpolate(x, size=size, scale_factor=scale_factor, mode=mode)
+    else:
+        raise NotImplementedError(f"resize(mode={mode}) not implemented.")
+
 LOGGING_NAME="custom"
 def set_logging(name=LOGGING_NAME, verbose=True):
     # sets up logging for the given name

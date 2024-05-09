@@ -11,6 +11,7 @@ from const import *
 import torch.backends.cudnn as cudnn
 import DataSet as myDataLoader
 import torch.optim.lr_scheduler
+import torch.nn.functional as F
 
 def resize(
     x: torch.Tensor,

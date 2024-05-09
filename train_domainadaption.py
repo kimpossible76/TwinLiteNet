@@ -97,8 +97,9 @@ def train_net(args):
                .format(args.resume, 0))
        else:
            print("=> no checkpoint found at '{}'".format(args.resume))
-
-
+   
+   for param in model.module.encoder.parameters():
+      param.requires_grad=False
    for epoch in range(start_epoch, args.max_epochs):
         model_file_name = args.savedir + os.sep + 'model_{}.pth'.format(epoch)
         poly_lr_scheduler(args, optimizer, epoch)

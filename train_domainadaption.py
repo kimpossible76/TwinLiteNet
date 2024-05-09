@@ -16,6 +16,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 import torch.nn.functional as F
+from loss import TotalLoss
 
 def train_net(args):
    transform=T.Compose([
@@ -49,7 +50,7 @@ def train_net(args):
       pseudo_data = torch.utils.data.DataLoader(
          myDataLoader.colab_first_pseudo_label_dataset(transform=transform, valid=False),
          batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
-      pseudo_label_maker(pseudo_data, model)
+      # pseudo_label_maker(pseudo_data, model)
 
 
     # create the directory if not exist

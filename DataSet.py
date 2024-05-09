@@ -207,15 +207,15 @@ class colabIADDataset(torch.utils.data.Dataset):
                 image = np.fliplr(image)
                 label1 = np.fliplr(label1)
                 label2 = np.fliplr(label2)
-
+            
         label1 = cv2.resize(label1, (W_, H_))
         label2 = cv2.resize(label2, (W_, H_))
         image = cv2.resize(image, (W_, H_))
 
-        _,seg_b1 = cv2.threshold(label1,0,255,cv2.THRESH_BINARY_INV)
-        _,seg_b2 = cv2.threshold(label2,0,255,cv2.THRESH_BINARY_INV)
-        _,seg1 = cv2.threshold(label1,0,255,cv2.THRESH_BINARY)
-        _,seg2 = cv2.threshold(label2,0,255,cv2.THRESH_BINARY)
+        _,seg_b1 = cv2.threshold(label1,1,255,cv2.THRESH_BINARY_INV)
+        _,seg_b2 = cv2.threshold(label2,1,255,cv2.THRESH_BINARY_INV)
+        _,seg1 = cv2.threshold(label1,1,255,cv2.THRESH_BINARY)
+        _,seg2 = cv2.threshold(label2,1,255,cv2.THRESH_BINARY)
 
         seg1 = self.Tensor(seg1)
         seg2 = self.Tensor(seg2)
@@ -226,10 +226,10 @@ class colabIADDataset(torch.utils.data.Dataset):
         image = image[:, :, ::-1].transpose(2, 0, 1)
         image = np.ascontiguousarray(image)
 
-        if self.transform is not None :
-            image = self.transform(image)
 
+       
         return image_name,image,(seg_da,seg_ll)
+    
 
 
 class colabMIXEDataset(torch.utils.data.Dataset):

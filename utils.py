@@ -223,3 +223,44 @@ def validation(model,valLoader):
                           ll_seg_acc=ll_segment_results[0],ll_seg_iou=ll_segment_results[1],ll_seg_miou=ll_segment_results[2])
     print(msg)
 
+def pseudo_label_maker(dataloader, model):
+    # model = create_seg_model('b0','bdd',weight_url='/kaggle/working/model_0.pth')
+    if not os.path.isdir('/content/iadd/ll'):
+        os.mkdir('/content/iadd/ll')
+        print('making ll folder')
+    if not os.path.isdir('/content/iadd/da'):
+        os.mkdir('/content/iadd/da')
+        print('making da folder')
+
+    # model = model.cuda()
+    model.eval()
+    tbar = tqdm(dataloader)
+    #     loop  = tqdm(names)
+
+    #     bch=iter(pseudo_data)
+    with torch.no_grad():
+        for name, image, shape in tbar:
+            #             print(name)
+            #         image=cv2.imread(name)
+            #         img = image.astype(np.uint8)
+            #         img = cv2.resize(img, [512,512], interpolation=cv2.INTER_LINEAR)
+            #         img=transform(img).unsqueeze(0).cuda()
+            y_da_pred, y_ll_pred = model(image.cuda())
+
+            H_, W_ = shape[0], shape[1]
+            y_da_pred = resize(y_da_pred, [H_, W_])
+            y_ll_pred = resize(y_ll_pred, [H_, W_])
+
+            y_da_pred = y_da_pred[0].argmax(0).detach().cpu().numpy()
+            y_ll_pred = y_ll_pred[0].argmax(0).detach().cpu().numpy()
+
+            y_da_pred = y_da_pred.astype(np.uint8) * 255
+            y_ll_pred = y_ll_pred.astype(np.uint8) * 255
+
+            nam = name[0].split('/')[-1]
+            da_name = '/content/iadd/da/' + nam.replace('.jpg', '.png')
+            ll_name = '/content/iadd/ll/' + nam.replace('.jpg', '.png')
+
+            cv2.imwrite(da_name, y_da_pred)
+            cv2.imwrite(ll_name, y_ll_pred)
+            tbar.set_description('pseudo relabeling: ')

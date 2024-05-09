@@ -34,8 +34,8 @@ def validation(args):
     
     model.load_state_dict(torch.load(args.weight))
     model.eval()
-    example = torch.rand(1, 3, 360, 640).cuda()
-    model = torch.jit.trace(model, example)
+    # example = torch.rand(1, 3, 360, 640).cuda()
+    # model = torch.jit.trace(model, example)
     da_segment_results,ll_segment_results = val(valLoader, model)
 
     msg =  'Driving area Segment: Acc({da_seg_acc:.3f})    IOU ({da_seg_iou:.3f})    mIOU({da_seg_miou:.3f})\n' \
